@@ -54,6 +54,13 @@
             <version>${poi.version}</version>
         </dependency>
         
+        
+        <!--selenium-->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+        </dependency>
+        
         <!--test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
