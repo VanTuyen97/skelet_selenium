@@ -3,24 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package provider.browser;
+package provider.selenium;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.test.context.junit4.SpringRunner;
-import provider.Factory;
+import xpath.XpathPage1;
 
 /**
  *
  * @author vantuyen361
  */
 @RunWith(SpringRunner.class)
-public class FireroxTest {
-
+public class XpathTest {
     @Test
     public void test() {
-        FirefoxDriver firefox = Factory.buildObject(FirefoxDriver.class);
+        Xpath xpath = XpathPage1.TUYEN_AGE;
+        System.out.println(xpath.toString());
+        System.out.println(xpath.nameElement());
     }
-    
 }

@@ -5,8 +5,11 @@
  */
 package provider.selenium;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
@@ -33,5 +36,24 @@ public class Wait extends WebDriverWait {
             }
             return isPageLoaded;
         });
+    }
+
+    public void visibilityOfElementLocated(Xpath xpath) {
+        By by = By.xpath(xpath.toString());
+        try {
+            this.until(ExpectedConditions.visibilityOfElementLocated(by));
+        } catch (Exception e) {
+            throw new TimeoutException(xpath.nameElement() + ": time out waiting for element search!");
+        }
+    }
+    
+    public void elementToBeClickable(Xpath xpath){
+        By by = By.xpath(xpath.toString());
+        try {
+            this.visibilityOfElementLocated(xpath);
+            this.until(ExpectedConditions.elementToBeClickable(by));
+        } catch (Exception e) {
+            throw new TimeoutException(xpath.nameElement() + ": time out waiting for element to be click!");
+        }
     }
 }

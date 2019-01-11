@@ -5,31 +5,20 @@
  */
 package provider;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import provider.selenium.Window;
 
 /**
  *
  * @author vantuyen361
  */
-@RunWith(SpringRunner.class)
-public class ContextTest {
-    ApplicationContext context;
-    
-    @Before
-    public void before() {
+public class Factory {
+    private static ApplicationContext context;
+    static{
         context = new AnnotationConfigApplicationContext(provider.Context.class);
     }
     
-    @Test
-    public void test() {
-        Window pm = (Window)context.getBean("PageManagerOfChrome");
+    public static <T>  T buildObject(Class<T> type){
+        return (T)context.getBean(type);
     }
-    
 }

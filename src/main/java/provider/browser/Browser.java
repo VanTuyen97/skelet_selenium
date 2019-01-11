@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
-import provider.selenium.PageManager;
+import provider.selenium.Window;
 
 /**
  *
@@ -21,7 +21,6 @@ public abstract class Browser {
             
 
     protected Map<String, String> browserProps = new HashMap();
-    protected WebDriver driver;
     protected String path;
     public String driverProperty;
     public int driverWaitImplicitly;
@@ -31,7 +30,7 @@ public abstract class Browser {
      * Set property or argument from browserProps file for browser.
      */
     public abstract void addProperties(); 
-    public abstract void openBrowser();
+    public abstract WebDriver openWindow();
     
     /**
      * Set path of driver to system.
@@ -44,13 +43,12 @@ public abstract class Browser {
     
     /**
      * build a browser.
-     * @return instance of PageManager manager pages class.
+     * @return instance of Window manager pages class.
      */
-    public PageManager buildPageManager(){
+    public Window buildWindow(){
         addPathDriver();
-        openBrowser();
-        driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.SECONDS);
-        PageManager manager = new PageManager();
+        WebDriver driver = openWindow();
+        Window manager = new Window();
         manager.init(driver, waitImplicitly);
         return manager;
     }

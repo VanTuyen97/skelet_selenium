@@ -5,13 +5,14 @@
  */
 package provider.browser;
 
+import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.Environment;
@@ -25,7 +26,7 @@ import provider.util.Directory;
  * @author vantuyen361
  */
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @org.springframework.context.annotation.PropertySource(value = "classpath:firefox.properties", ignoreResourceNotFound = true)//placeholder file browserProps
 public class Firefox extends Browser {
 
@@ -37,7 +38,7 @@ public class Firefox extends Browser {
     private Environment env; //get value from chrome.browserProps file
 
     @Override
-    public void openBrowser() {
+    public WebDriver openWindow() {
         FirefoxProfile profile = new FirefoxProfile();
         browserProps.forEach((key, value) -> {
             boolean flag = false;
@@ -62,7 +63,9 @@ public class Firefox extends Browser {
         });
         DesiredCapabilities caps = DesiredCapabilities.firefox();
         caps.setCapability("firefox_profile", profile);
-        driver = new FirefoxDriver(caps);
+        WebDriver driver = new FirefoxDriver(caps);
+        driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.SECONDS);
+        return driver;
     }
 
     @Override

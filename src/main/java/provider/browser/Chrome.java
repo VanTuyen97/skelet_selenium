@@ -5,14 +5,13 @@
  */
 package provider.browser;
 
-import com.google.common.base.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.AbstractEnvironment;
@@ -26,7 +25,7 @@ import provider.util.Directory;
  * @author vantuyen361
  */
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @org.springframework.context.annotation.PropertySource(value = "classpath:chrome.properties", ignoreResourceNotFound = true)//placeholder file browserProps
 public class Chrome extends Browser {
 
@@ -38,12 +37,14 @@ public class Chrome extends Browser {
     private Environment env; //get value from chrome.browserProps file
 
     @Override
-    public void openBrowser() {
+    public WebDriver openWindow() {
         ChromeOptions ops = new ChromeOptions();
         browserProps.forEach((key, value) -> {
             ops.addArguments(value);
         });
-        driver = (WebDriver) new Chrome();
+         WebDriver driver = (WebDriver) new ChromeDriver(ops);
+         driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.SECONDS);
+         return driver;
     }
 
     @Override

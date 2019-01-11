@@ -5,14 +5,18 @@
  */
 package provider;
 
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import provider.browser.Chrome;
 import provider.browser.Firefox;
-import provider.selenium.PageManager;
+import provider.selenium.Window;
 
 /**
  *
@@ -22,14 +26,26 @@ import provider.selenium.PageManager;
 @ComponentScan(basePackages = {"provider.browser"})
 @Lazy
 public class Context {
-
-    @Bean(name = "PageManagerOfChrome")
-    public PageManager pageManager(@Autowired Chrome chrome){
-        return chrome.buildPageManager();
+    
+    @Bean(name = "windowOfChrome")
+    public Window windowOfChrome(@Autowired Chrome chrome){
+        return chrome.buildWindow();
+    }
+    
+    @Bean(name = "windowOfFirefox")
+    public Window windowOfFirefox(@Autowired Firefox firefox){
+        return firefox.buildWindow();
+    }
+    
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ChromeDriver chromedriver(@Autowired Chrome chrome){
+        return (ChromeDriver)chrome.openWindow();
     }
 
-    @Bean(name = "PageManagerOfFirefox")
-    public PageManager pageManager(@Autowired Firefox firefox){
-        return firefox.buildPageManager();
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public FirefoxDriver firefoxDriver(@Autowired Firefox firefox){
+        return (FirefoxDriver)firefox.openWindow();
     }
 }

@@ -11,11 +11,11 @@ import org.openqa.selenium.WebDriver;
  *
  * @author vantuyen361
  */
-public class PageManager {
+public class Window {
     WebDriver driver;
     int waitImplicitly;
     
-    public PageManager(){
+    public Window(){
     }
     /**
      * initialization page manager

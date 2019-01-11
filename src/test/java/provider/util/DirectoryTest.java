@@ -20,23 +20,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class DirectoryTest {
 
-    private Directory d;
-
-    @Before
-    public void before() {
-        d = new Directory();
-    }
-
     @Test
     public void testSomeMethod() {
-        String path = d.convertPathFromProjectFolder("guide\\readme.txt");
+        String path = Directory.convertPathFromProjectFolder("guide\\readme.txt");
         Assert.assertTrue("convert path failure, path:" + path, path.contains("skelet_selenium\\guide\\readme.txt"));
     }
 
     @Test
     public void testFileFromClassPath() throws URISyntaxException {
         try {
-            File file = d.fileFromClassPath("/application.properties");
+            File file = Directory.fileFromClassPath("/application.properties");
         } catch (NullPointerException e) {
             Assert.assertTrue("not found file.", false);
         }
@@ -44,12 +37,12 @@ public class DirectoryTest {
 
     @Test
     public void testPathOfCurrentProject() throws URISyntaxException {
-        String path = d.pathOfCurrentProject();
+        String path = Directory.pathOfCurrentProject();
         Assert.assertTrue("don't get path of current project.", path.contains("skelet_selenium"));
     }
 
     @Test
     public void testShowAllSystemProperties(){
-        d.showAllSystemProperties();
+        Directory.showAllSystemProperties();
     }
 }
