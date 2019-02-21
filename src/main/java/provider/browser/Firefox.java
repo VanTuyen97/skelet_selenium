@@ -64,7 +64,7 @@ public class Firefox extends Browser {
         DesiredCapabilities caps = DesiredCapabilities.firefox();
         caps.setCapability("firefox_profile", profile);
         WebDriver driver = new FirefoxDriver(caps);
-        driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.MILLISECONDS);
         return driver;
     }
 

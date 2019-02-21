@@ -5,10 +5,15 @@
  */
 package provider.selenium;
 
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,9 +24,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Wait extends WebDriverWait {
 
     protected WebDriver driver;
+    private final long timeOut;
 
-    public Wait(WebDriver driver, long timeout) {
-        super(driver, timeout);
+    public Wait(WebDriver driver, long timeOut) {
+        super(driver, timeOut);
+        this.timeOut = timeOut;
         this.driver = driver;
     }
 
@@ -38,22 +45,19 @@ public class Wait extends WebDriverWait {
         });
     }
 
-    public void visibilityOfElementLocated(Xpath xpath) {
-        By by = By.xpath(xpath.toString());
+    public <V extends Object> V until(Function<? super WebDriver, V> isTrue, long timeOutInSeconds) {
         try {
-            this.until(ExpectedConditions.visibilityOfElementLocated(by));
-        } catch (Exception e) {
-            throw new TimeoutException(xpath.nameElement() + ": time out waiting for element search!");
+            this.withTimeout(timeOutInSeconds, TimeUnit.SECONDS);
+            return until(isTrue);
+        } finally {
+            this.withTimeout(timeOut, TimeUnit.SECONDS);
         }
     }
-    
-    public void elementToBeClickable(Xpath xpath){
-        By by = By.xpath(xpath.toString());
-        try {
-            this.visibilityOfElementLocated(xpath);
-            this.until(ExpectedConditions.elementToBeClickable(by));
-        } catch (Exception e) {
-            throw new TimeoutException(xpath.nameElement() + ": time out waiting for element to be click!");
-        }
+
+    @Override
+    protected RuntimeException timeoutException(String message, Throwable lastException) {
+        WebDriver exceptionDriver = driver;
+        TimeoutException ex = new TimeoutException(message, lastException);
+        throw ex;
     }
 }

@@ -7,7 +7,6 @@ package provider.browser;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
 import provider.selenium.Window;
 

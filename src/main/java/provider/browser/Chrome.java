@@ -43,7 +43,7 @@ public class Chrome extends Browser {
             ops.addArguments(value);
         });
          WebDriver driver = (WebDriver) new ChromeDriver(ops);
-         driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.SECONDS);
+         driver.manage().timeouts().implicitlyWait(driverWaitImplicitly, TimeUnit.MILLISECONDS);
          return driver;
     }
 
